@@ -14,15 +14,26 @@ class Fib extends Component {
   }
 
   async fetchValues() {
-    const values = await axios.get('/api/values/current');
-    this.setState({ values: values.data });
+    try {
+      const values = await axios.get('/api/values/current');
+      this.setState({ values: values.data });
+    } catch (error) {
+      console.error("Impossibile recuperare i valori correnti:", error.message);
+      // Opzionale: puoi impostare uno stato di errore per l'utente finale
+    }
   }
 
   async fetchIndexes() {
-    const seenIndexes = await axios.get('/api/values/all');
-    this.setState({
-      seenIndexes: seenIndexes.data,
-    });
+    try {
+      const seenIndexes = await axios.get('/api/values/all');
+      this.setState({
+        seenIndexes: seenIndexes.data,
+      });
+    } catch (error) {
+      console.error("Impossibile recuperare gli indici visti:", error.message);
+      // Impostiamo un array vuoto di sicurezza così il map() nel render non si rompe
+      this.setState({ seenIndexes: [] }); 
+    }
   }
 
   handleSubmit = async (event) => {
